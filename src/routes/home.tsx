@@ -21,7 +21,7 @@ const HomePage = () => {
             <br />
             improve your interview chances and skills
           </h2>
-          <p className="mt-4 text-muted-foreground text-sm">
+          <p className="mt-4 text-sm md:text-base lg:text-lg text-muted-foreground">
             Boost your interview skills and increase your success rate with
             AI-driven insights. Discover a smarter way to prepare, practice, and
             stand out.
