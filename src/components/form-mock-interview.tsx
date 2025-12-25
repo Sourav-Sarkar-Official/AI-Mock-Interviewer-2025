@@ -94,7 +94,7 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
     }
   };
 
-  const generateAiResponse = async (data: FormData) => {
+  const generateAiResponse = async (data: FormData, retryCount = 0) => {
     const prompt = `
         As an experienced prompt engineer, generate a JSON array containing 5 technical interview questions along with detailed answers based on the following job information. Each object in the array should have the fields "question" and "answer", formatted as follows:
 
@@ -112,10 +112,23 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
         The questions should assess skills in ${data?.techStack} development and best practices, problem-solving, and experience handling complex requirements. Please format the output strictly as an array of JSON objects without any additional labels, code blocks, or explanations. Return only the JSON array with questions and answers.
         `;
 
-    const aiResult = await chatSession.sendMessage(prompt);
-    const cleanedResponse = cleanAiResponse(aiResult.response.text());
-
-    return cleanedResponse;
+    try {
+      const aiResult = await chatSession.sendMessage(prompt);
+      const cleanedResponse = cleanAiResponse(aiResult.response.text());
+      return cleanedResponse;
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if (errorMessage.includes('RATE_LIMIT_EXCEEDED') || errorMessage.includes('Quota exceeded')) {
+        if (retryCount < 3) {
+          // Wait 10 seconds before retry
+          await new Promise(resolve => setTimeout(resolve, 10000));
+          return generateAiResponse(data, retryCount + 1);
+        } else {
+          throw new Error('AI service quota exceeded. Please try again later or contact support to increase your quota.');
+        }
+      }
+      throw error;
+    }
   };
 
   const onSubmit = async (data: FormData) => {

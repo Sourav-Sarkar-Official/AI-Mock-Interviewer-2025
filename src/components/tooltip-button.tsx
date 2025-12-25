@@ -25,7 +25,9 @@ interface TooltipButtonProps {
   buttonVariant?: ButtonVariant;
   buttonClassName?: string;
   delay?: number;
+  // support both the misspelled `disbaled` used across the repo and the correct `disabled`
   disbaled?: boolean;
+  disabled?: boolean;
   loading?: boolean;
 }
 
@@ -37,17 +39,18 @@ export const TooltipButton = ({
   buttonClassName = "",
   delay = 0,
   disbaled = false,
+  disabled = false,
   loading = false,
 }: TooltipButtonProps) => {
   return (
     <TooltipProvider delayDuration={delay}>
       <Tooltip>
         <TooltipTrigger
-          className={disbaled ? "cursor-not-allowed" : "cursor-pointer"}
+          className={disabled || disbaled ? "cursor-not-allowed" : "cursor-pointer"}
         >
           <Button
             size={"icon"}
-            disabled={disbaled}
+            disabled={disabled || disbaled}
             variant={buttonVariant}
             className={buttonClassName}
             onClick={onClick}
