@@ -104,7 +104,7 @@ const HomePage = () => {
 
             <Link to={"/generate"} className="w-full">
               <Button className="w-3/4">
-                Generate <Search className="ml-2" />
+                Start Your Interview <Search className="ml-2" />
               </Button>
             </Link>
           </div>

@@ -20,15 +20,17 @@ const Header = () => {
           <LogoContainer />
 
           {/* navigation section */}
-          <nav className="hidden md:flex items-center gap-3">
+          <nav className="hidden md:flex items-center gap-3 ">
             <NavigationRoutes />
             {userId && (
               <NavLink
                 to={"/generate"}
                 className={({ isActive }) =>
                   cn(
-                    "text-base text-neutral-600",
-                    isActive && "text-neutral-900 font-semibold"
+                    "text-base px-4 py-2 rounded-md font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-red-300",
+                    isActive
+                      ? "bg-red-600 text-white shadow-md"
+                      : "bg-red-500 text-white hover:bg-red-600"
                   )
                 }
               >

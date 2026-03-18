@@ -152,8 +152,10 @@ export const RecordAnswer = ({
   const saveUserAnswer = async () => {
     setLoading(true);
 
-    // If no aiResult exists yet, and user is typing, generate feedback first.
-    if (!aiResult) {
+    // Use a local variable to avoid relying on React's async state update.
+    let finalAi: AIResponse | null = aiResult;
+
+    if (!finalAi) {
       if (isTyping) {
         if ((userAnswer || "").trim().length < 30) {
           toast.error("Error", {
@@ -164,12 +166,13 @@ export const RecordAnswer = ({
         }
 
         try {
-          const generated = await generateResult(
+          finalAi = await generateResult(
             question.question,
             question.answer,
             userAnswer
           );
-          setAiResult(generated);
+          // store result in state for future operations/views
+          setAiResult(finalAi);
         } catch (err) {
           console.log(err);
           toast("Error", { description: "Failed to generate AI feedback." });
@@ -186,9 +189,18 @@ export const RecordAnswer = ({
       }
     }
 
+    // finalAi should now be populated
+    if (!finalAi) {
+      toast.error("Error", {
+        description: "No AI feedback available.",
+      });
+      setLoading(false);
+      return;
+    }
+
     const currentQuestion = question.question;
     try {
-      // query the firbase to check if the user answer already exists for this question
+      // query the firebase to check if the user answer already exists for this question
 
       const userAnswerQuery = query(
         collection(db, "userAnswers"),
@@ -198,7 +210,7 @@ export const RecordAnswer = ({
 
       const querySnap = await getDocs(userAnswerQuery);
 
-      // if the user already answerd the question dont save it again
+      // if the user already answered the question don't save it again
       if (!querySnap.empty) {
         console.log("Query Snap Size", querySnap.size);
         toast.info("Already Answered", {
@@ -206,8 +218,7 @@ export const RecordAnswer = ({
         });
         return;
       } else {
-        // save the user answer
-        const finalAi = aiResult!;
+        // save the user answer using the locally obtained AI result
         await addDoc(collection(db, "userAnswers"), {
           mockIdRef: interviewId,
           question: question.question,
@@ -219,7 +230,7 @@ export const RecordAnswer = ({
           createdAt: serverTimestamp(),
         });
 
-        toast("Saved", { description: "Your answer has been saved.." });
+        toast("Saved", { description: "Your answer has been saved." });
       }
 
       setUserAnswer("");

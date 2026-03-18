@@ -75,7 +75,7 @@ export const MockInterviewPage = () => {
               Important Note
             </AlertTitle>
             <AlertDescription className="text-sm text-sky-700 mt-1 leading-relaxed">
-              Press "Record Answer" to begin answering the question. Once you
+              Press "Record Answer" or "Type Answer" to begin answering the question. Once you
               finish the interview, you&apos;ll receive feedback comparing your
               responses with the ideal answers.
               <br />
@@ -89,7 +89,7 @@ export const MockInterviewPage = () => {
       </div>
 
       {interview?.questions && interview?.questions.length > 0 && (
-        <div className="mt-4 w-full flex flex-col items-start gap-4">
+        <div className="mt-4 w-full flex flex-col items-start gap-4 font-bold">
           <QuestionSection questions={interview?.questions} />
         </div>
       )}

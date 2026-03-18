@@ -55,46 +55,55 @@ export const InterviewPin = ({
         </p>
 
         {!onMockPage && (
-          <div className="flex items-center justify-center">
-            <TooltipButton
-              content="View"
-              buttonVariant={"ghost"}
-              onClick={() => {
-                navigate(`/generate/${interview?.id}`, { replace: true });
-              }}
-              disbaled={false}
-              buttonClassName="hover:text-sky-500"
-              icon={<Eye />}
-              loading={false}
-            />
+          <div className="flex items-center justify-center gap-4">
+            <div className="flex flex-col items-center gap-1">
+              <TooltipButton
+                content="View"
+                buttonVariant={"ghost"}
+                onClick={() => {
+                  navigate(`/generate/${interview?.id}`, { replace: true });
+                }}
+                disbaled={false}
+                buttonClassName="hover:text-sky-500"
+                icon={<Eye />}
+                loading={false}
+              />
+              <span className="text-xs text-muted-foreground">View</span>
+            </div>
 
-            <TooltipButton
-              content="Feedback"
-              buttonVariant={"ghost"}
-              onClick={() => {
-                navigate(`/generate/feedback/${interview?.id}`, {
-                  replace: true,
-                });
-              }}
-              disbaled={false}
-              buttonClassName="hover:text-yellow-500"
-              icon={<Newspaper />}
-              loading={false}
-            />
+            <div className="flex flex-col items-center gap-1">
+              <TooltipButton
+                content="Feedback"
+                buttonVariant={"ghost"}
+                onClick={() => {
+                  navigate(`/generate/feedback/${interview?.id}`, {
+                    replace: true,
+                  });
+                }}
+                disbaled={false}
+                buttonClassName="hover:text-yellow-500"
+                icon={<Newspaper />}
+                loading={false}
+              />
+              <span className="text-xs text-muted-foreground">Feedback</span>
+            </div>
 
-            <TooltipButton
-              content="Start"
-              buttonVariant={"ghost"}
-              onClick={() => {
-                navigate(`/generate/interview/${interview?.id}`, {
-                  replace: true,
-                });
-              }}
-              disbaled={false}
-              buttonClassName="hover:text-sky-500"
-              icon={<Sparkles />}
-              loading={false}
-            />
+            <div className="flex flex-col items-center gap-1">
+              <TooltipButton
+                content="Start"
+                buttonVariant={"ghost"}
+                onClick={() => {
+                  navigate(`/generate/interview/${interview?.id}`, {
+                    replace: true,
+                  });
+                }}
+                disbaled={false}
+                buttonClassName="hover:text-sky-500"
+                icon={<Sparkles />}
+                loading={false}
+              />
+              <span className="text-xs text-muted-foreground">Start</span>
+            </div>
           </div>
         )}
       </CardFooter>
